@@ -78,3 +78,19 @@
   districts_latest_hourly = pd.read_sql_query(
 /Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:441: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_latest_daily = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:450: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  city_hourly_count = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:454: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  city_daily_count = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:459: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  districts_hourly_count = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:463: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  districts_daily_count = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:468: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  city_latest_hourly = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:472: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  city_latest_daily = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:476: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  districts_latest_hourly = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:480: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  districts_latest_daily = pd.read_sql_query(

@@ -12,6 +12,8 @@ import subprocess
 import logging
 import requests
 import json
+import pandas as pd
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -62,8 +64,11 @@ MC4CAQAwBQYDK2VwBCIEIHioY4NMxin5qZ8D18i296EMTZ2VB5kp+jgkdNjKm5rb
         return None
 
 def get_location_list():
-    """获取所有13个地区的location_id列表"""
-    locations = [
+    """获取所有152个地区的location_id列表（13个济南区县 + 139个山东省其他城市）"""
+    import pandas as pd
+    
+    # 原有的13个济南区县
+    jinan_locations = [
         ("101120101", "济南"),
         ("101120102", "长清"),
         ("101120103", "商河"),
@@ -78,7 +83,22 @@ def get_location_list():
         ("101121601", "莱芜"),
         ("101121603", "钢城")
     ]
-    return locations
+    
+    # 读取139个山东省其他城市
+    try:
+        df = pd.read_csv("山东省城市列表_除济南.csv")
+        shandong_locations = [(row['location_ID'], row['name']) for _, row in df.iterrows()]
+        print(f"✅ 成功读取山东省其他城市数据: {len(shandong_locations)} 个")
+    except Exception as e:
+        print(f"⚠️ 读取山东省城市列表失败: {e}")
+        print("🔄 仅使用济南市13个区县数据")
+        shandong_locations = []
+    
+    # 合并所有位置
+    all_locations = jinan_locations + shandong_locations
+    print(f"📍 总计地区数量: {len(all_locations)} 个 (济南区县: {len(jinan_locations)}, 山东其他城市: {len(shandong_locations)})")
+    
+    return all_locations
 
 def get_weather_data_for_location(token, location_id, location_name, date_str, logger):
     """获取指定地区的天气数据"""
@@ -104,11 +124,12 @@ def get_weather_data_for_location(token, location_id, location_name, date_str, l
         
         if data.get("code") == "200":
             hourly_data = data.get("weatherHourly", [])
-            logger.info(f"✅ {location_name} 成功获取 {len(hourly_data)} 条记录")
-            return hourly_data, location_id, location_name
+            daily_data = data.get("weatherDaily", {})  # 新增：获取每日汇总数据
+            logger.info(f"✅ {location_name} 成功获取小时数据 {len(hourly_data)} 条，每日数据 1 条")
+            return hourly_data, daily_data, location_id, location_name
         else:
             logger.error(f"❌ {location_name} API返回错误: {data.get('code')} - {data.get('msg', 'Unknown error')}")
-            return None, location_id, location_name
+            return None, None, location_id, location_name
             
     except requests.exceptions.RequestException as e:
         logger.error(f"❌ {location_name} 请求失败: {e}")
@@ -118,8 +139,8 @@ def get_weather_data_for_location(token, location_id, location_name, date_str, l
         return None, location_id, location_name
 
 def get_today_weather_data(token, logger):
-    """获取昨天所有13个地区的天气数据"""
-    logger.info("🌤️ 开始获取昨天所有13个地区的天气数据...")
+    """获取昨天所有152个地区的天气数据（分批处理）"""
+    logger.info("🌤️ 开始获取昨天所有152个地区的天气数据...")
     
     # 获取昨天的日期
     yesterday = datetime.now() - timedelta(days=1)
@@ -127,28 +148,73 @@ def get_today_weather_data(token, logger):
     
     # 获取所有地区列表
     locations = get_location_list()
+    total_locations = len(locations)
+    
     all_weather_data = []
+    all_daily_data = []
     success_count = 0
     
-    for location_id, location_name in locations:
-        weather_data, loc_id, loc_name = get_weather_data_for_location(token, location_id, location_name, date_str, logger)
-        if weather_data:
-            # 为每条记录添加location信息
-            for record in weather_data:
-                record['location_id'] = loc_id
-                record['location_name'] = loc_name
-            all_weather_data.extend(weather_data)
-            success_count += 1
+    # 分批处理配置
+    batch_size = 20  # 每批处理20个城市
+    batch_delay = 2  # 每批之间延时2秒
     
-    logger.info(f"✅ 总计成功获取 {success_count}/{len(locations)} 个地区的天气数据，共 {len(all_weather_data)} 条记录")
+    logger.info(f"📊 数据获取配置:")
+    logger.info(f"   - 总地区数: {total_locations}")
+    logger.info(f"   - 批次大小: {batch_size}")
+    logger.info(f"   - 批次延时: {batch_delay}秒")
+    logger.info(f"   - 预计批次数: {(total_locations + batch_size - 1) // batch_size}")
+    
+    # 分批处理
+    for batch_num in range(0, total_locations, batch_size):
+        batch_locations = locations[batch_num:batch_num + batch_size]
+        batch_end = min(batch_num + batch_size, total_locations)
+        
+        logger.info(f"🔄 处理批次 {batch_num // batch_size + 1}: 地区 {batch_num + 1}-{batch_end}")
+        
+        for i, (location_id, location_name) in enumerate(batch_locations):
+            current_index = batch_num + i + 1
+            logger.info(f"   正在获取 {location_name}({location_id}) 数据... ({current_index}/{total_locations})")
+            
+            hourly_data, daily_data, loc_id, loc_name = get_weather_data_for_location(
+                token, location_id, location_name, date_str, logger
+            )
+            
+            if hourly_data:
+                # 为每条小时记录添加location信息
+                for record in hourly_data:
+                    record['location_id'] = loc_id
+                    record['location_name'] = loc_name
+                all_weather_data.extend(hourly_data)
+                
+                # 保存每日数据
+                if daily_data:
+                    daily_data['location_id'] = loc_id
+                    daily_data['location_name'] = loc_name
+                    all_daily_data.append(daily_data)
+                
+                success_count += 1
+                logger.info(f"   ✅ {location_name} 数据获取成功")
+            else:
+                logger.warning(f"   ⚠️ {location_name} 数据获取失败")
+        
+        # 批次间延时（除了最后一批）
+        if batch_end < total_locations:
+            logger.info(f"⏳ 批次完成，等待 {batch_delay} 秒后继续...")
+            import time
+            time.sleep(batch_delay)
+    
+    logger.info(f"✅ 数据获取完成！成功: {success_count}/{total_locations} 个地区")
+    logger.info(f"   - 小时数据: {len(all_weather_data)} 条")
+    logger.info(f"   - 每日数据: {len(all_daily_data)} 条")
+    logger.info(f"   - 成功率: {success_count/total_locations*100:.1f}%")
     
     if success_count == 0:
-        return None
+        return None, None
     
-    return all_weather_data
+    return all_weather_data, all_daily_data
 
-def save_weather_data_to_db(weather_data, logger):
-    """保存所有地区的天气数据到数据库"""
+def save_weather_data_to_db(hourly_data, daily_data, logger):
+    """保存所有地区的小时数据和每日数据到数据库"""
     logger.info("💾 开始保存所有地区的天气数据到数据库...")
     
     try:
@@ -158,41 +224,58 @@ def save_weather_data_to_db(weather_data, logger):
         mysql_db_utils.init_mysql_database()
         logger.info("✅ 数据库初始化完成")
         
-        # 按地区分组保存数据
-        location_groups = {}
-        for record in weather_data:
+        # 1. 保存小时数据
+        logger.info("📊 保存小时天气数据...")
+        hourly_location_groups = {}
+        for record in hourly_data:
             location_id = record.get('location_id')
             location_name = record.get('location_name')
-            if location_id not in location_groups:
-                location_groups[location_id] = {'name': location_name, 'data': []}
-            location_groups[location_id]['data'].append(record)
+            if location_id not in hourly_location_groups:
+                hourly_location_groups[location_id] = {'name': location_name, 'data': []}
+            hourly_location_groups[location_id]['data'].append(record)
         
-        total_new = 0
-        total_updated = 0
+        total_hourly_new = 0
+        total_hourly_updated = 0
         
-        # 保存每个地区的数据
-        for location_id, info in location_groups.items():
+        for location_id, info in hourly_location_groups.items():
             location_name = info['name']
             location_data = info['data']
             
-            logger.info(f"正在保存 {location_name}({location_id}) 的 {len(location_data)} 条记录...")
+            logger.info(f"正在保存 {location_name}({location_id}) 的小时数据 {len(location_data)} 条...")
             
-            # 统一使用districts表保存所有数据
             result = mysql_db_utils.save_districts_hourly_to_mysql(location_data, location_id, location_name)
             
             if result and len(result) == 2:
                 new_count, updated_count = result
-                total_new += new_count
-                total_updated += updated_count
-                logger.info(f"✅ {location_name} 保存完成: 新增{new_count}条，更新{updated_count}条")
+                total_hourly_new += new_count
+                total_hourly_updated += updated_count
+                logger.info(f"✅ {location_name} 小时数据保存完成: 新增{new_count}条，更新{updated_count}条")
             else:
-                logger.warning(f"⚠️ {location_name} 数据保存返回格式异常")
+                logger.warning(f"⚠️ {location_name} 小时数据保存返回格式异常")
         
-        logger.info(f"✅ 所有地区小时数据保存完成: 总计新增{total_new}条，更新{total_updated}条")
+        logger.info(f"✅ 所有地区小时数据保存完成: 总计新增{total_hourly_new}条，更新{total_hourly_updated}条")
         
-        # 计算所有地区的每日汇总
-        mysql_db_utils.calculate_districts_daily_summaries_mysql()
-        logger.info("✅ 所有地区每日汇总计算完成")
+        # 2. 保存每日数据（新逻辑：直接使用API的weatherDaily）
+        logger.info("📅 保存每日天气数据...")
+        total_daily_new = 0
+        total_daily_updated = 0
+        
+        for daily_record in daily_data:
+            location_id = daily_record.get('location_id')
+            location_name = daily_record.get('location_name')
+            
+            logger.info(f"正在保存 {location_name}({location_id}) 的每日数据...")
+            
+            result = mysql_db_utils.save_daily_weather_mysql(daily_record, location_id, location_name)
+            
+            if result and len(result) == 2:
+                new_count, updated_count = result
+                total_daily_new += new_count
+                total_daily_updated += updated_count
+            else:
+                logger.warning(f"⚠️ {location_name} 每日数据保存返回格式异常")
+        
+        logger.info(f"✅ 所有地区每日数据保存完成: 总计新增{total_daily_new}条，更新{total_daily_updated}条")
         
         return True
         
@@ -269,7 +352,7 @@ def main():
     logger.info("🌤️  每日自动天气数据收集开始")
     logger.info("=" * 60)
     logger.info(f"⏰ 执行时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    logger.info("🎯 目标: 自动收集昨天所有13个地区(济南市+12个区县)的天气数据并存入数据库")
+    logger.info("🎯 目标: 自动收集昨天所有152个地区(济南13个区县+山东省139个其他城市)的天气数据并存入数据库")
     logger.info("=" * 60)
     
     # 检查系统状态
@@ -285,17 +368,17 @@ def main():
         return 1
     logger.info("✅ 步骤1完成 - JWT Token生成成功")
     
-    # 步骤2: 获取昨天所有13个地区的天气数据
-    logger.info("\n🔄 执行步骤2: 获取昨天所有13个地区的天气数据...")
-    weather_data = get_today_weather_data(token, logger)
-    if not weather_data:
+    # 步骤2: 获取昨天所有152个地区的天气数据
+    logger.info("\n🔄 执行步骤2: 获取昨天所有152个地区的天气数据...")
+    hourly_data, daily_data = get_today_weather_data(token, logger)
+    if not hourly_data or not daily_data:
         logger.error("❌ 步骤2失败 - 天气数据获取失败，终止执行")
         return 1
     logger.info("✅ 步骤2完成 - 天气数据获取成功")
     
     # 步骤3: 保存数据到数据库
     logger.info("\n🔄 执行步骤3: 保存数据到数据库...")
-    if not save_weather_data_to_db(weather_data, logger):
+    if not save_weather_data_to_db(hourly_data, daily_data, logger):
         logger.error("❌ 步骤3失败 - 数据保存失败")
         return 1
     logger.info("✅ 步骤3完成 - 数据保存成功")
@@ -313,8 +396,8 @@ def main():
     logger.info("🎉 每日自动执行完全成功！")
     logger.info("📊 执行结果:")
     logger.info("   - JWT Token生成: ✅")
-    logger.info("   - 天气数据获取(13个地区): ✅")
-    logger.info("   - 数据库保存(13个地区): ✅")
+    logger.info("   - 天气数据获取(152个地区): ✅")
+    logger.info("   - 数据库保存(152个地区): ✅")
     logger.info("   - 统计报告: ✅")
     logger.info("📅 下次执行时间: 明天早上9:30")
     logger.info("=" * 60)

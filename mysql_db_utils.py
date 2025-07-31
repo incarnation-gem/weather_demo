@@ -40,45 +40,40 @@ def init_mysql_database():
             id INT AUTO_INCREMENT PRIMARY KEY,
             location_id VARCHAR(20) NOT NULL,
             location_name VARCHAR(50),
+            province VARCHAR(50),
+            city VARCHAR(50),
             datetime DATETIME NOT NULL,
-            temp DECIMAL(4,1),
-            humidity DECIMAL(4,1),
-            precip DECIMAL(6,2),
-            pressure DECIMAL(6,1),
-            wind_speed DECIMAL(5,1),
+            temp_celsius DECIMAL(4,1),
+            humidity_percent DECIMAL(4,1),
+            precip_mm DECIMAL(6,2),
+            pressure_hpa DECIMAL(6,1),
+            wind_scale VARCHAR(5),
             wind_dir VARCHAR(10),
+            text VARCHAR(20),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY unique_location_datetime (location_id, datetime)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci 
+        STATS_SAMPLE_PAGES=100 STATS_AUTO_RECALC=1
         """
         
-        # 创建统一的每日天气汇总表
+        # 创建统一的每日天气汇总表（直接使用API的weatherDaily数据）
         create_daily_table = """
         CREATE TABLE IF NOT EXISTS daily_weather (
             id INT AUTO_INCREMENT PRIMARY KEY,
             location_id VARCHAR(20) NOT NULL,
             location_name VARCHAR(50),
+            province VARCHAR(50) COMMENT '省份',
+            city VARCHAR(50) COMMENT '城市',
             date DATE NOT NULL,
-            min_temp DECIMAL(4,1),
-            max_temp DECIMAL(4,1),
-            avg_temp DECIMAL(4,1),
-            total_precip DECIMAL(6,2),
-            avg_wind_speed DECIMAL(5,1),
-            avg_humidity DECIMAL(4,1),
-            record_count INT,
+            temp_min_celsius DECIMAL(4,1) COMMENT '最低温度(摄氏度)',
+            temp_max_celsius DECIMAL(4,1) COMMENT '最高温度(摄氏度)',
+            humidity_percent DECIMAL(4,1) COMMENT '湿度(%)',
+            precip_mm DECIMAL(6,2) COMMENT '降水量(mm)',
+            pressure_hpa DECIMAL(6,1) COMMENT '气压(hPa)',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY unique_location_date (location_id, date)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        """
-        
-        # 创建位置信息表
-        create_location_table = """
-        CREATE TABLE IF NOT EXISTS location_info (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            location_id VARCHAR(20) NOT NULL UNIQUE,
-            location_name VARCHAR(50) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        STATS_SAMPLE_PAGES=100 STATS_AUTO_RECALC=1
         """
         
         # 创建索引
@@ -93,7 +88,6 @@ def init_mysql_database():
         
         cursor.execute(create_hourly_table)
         cursor.execute(create_daily_table)
-        cursor.execute(create_location_table)
         
         for index_sql in create_indexes:
             try:
@@ -125,17 +119,20 @@ def save_hourly_to_mysql(hourly_data, location_id="101120101", location_name="�
         # 准备插入语句
         insert_sql = """
         INSERT INTO hourly_weather 
-        (location_id, location_name, datetime, temp, humidity, precip, pressure, 
-         wind_speed, wind_dir)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (location_id, location_name, province, city, datetime, temp_celsius, humidity_percent, precip_mm, pressure_hpa, 
+         wind_scale, wind_dir, text)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
         location_name = VALUES(location_name),
-        temp = VALUES(temp),
-        humidity = VALUES(humidity),
-        precip = VALUES(precip),
-        pressure = VALUES(pressure),
-        wind_speed = VALUES(wind_speed),
-        wind_dir = VALUES(wind_dir)
+        province = VALUES(province),
+        city = VALUES(city),
+        temp_celsius = VALUES(temp_celsius),
+        humidity_percent = VALUES(humidity_percent),
+        precip_mm = VALUES(precip_mm),
+        pressure_hpa = VALUES(pressure_hpa),
+        wind_scale = VALUES(wind_scale),
+        wind_dir = VALUES(wind_dir),
+        text = VALUES(text)
         """
         
         new_count = 0
@@ -152,16 +149,24 @@ def save_hourly_to_mysql(hourly_data, location_id="101120101", location_name="�
                 else:
                     datetime_str = time_str
                 
+                # 获取省市信息
+                location_info = get_location_province_city(location_id)
+                province = location_info['province']
+                city = location_info['city']
+                
                 data = (
                     location_id,
                     location_name,
+                    province,  # 使用动态省市信息
+                    city,      # 使用动态省市信息
                     datetime_str,  # 转换后的时间格式
                     hour_data.get('temp'),
                     hour_data.get('humidity'),
                     hour_data.get('precip', 0.0),  # 处理None值
                     hour_data.get('pressure'),
-                    hour_data.get('windSpeed'),
-                    hour_data.get('windDir')
+                    hour_data.get('windScale'),  # 使用windScale而不是windSpeed
+                    hour_data.get('windDir'),
+                    hour_data.get('text')   # 天气现象描述
                 )
                 
                 cursor.execute(insert_sql, data)
@@ -199,12 +204,12 @@ def calculate_daily_summaries_mysql(location_id="101120101", location_name="济�
             location_id,
             location_name,
             DATE(datetime) as date,
-            MIN(temp) as min_temp,
-            MAX(temp) as max_temp,
-            AVG(temp) as avg_temp,
-            SUM(COALESCE(precip, 0)) as total_precip,
-            AVG(wind_speed) as avg_wind_speed,
-            AVG(humidity) as avg_humidity,
+            MIN(temp_celsius) as min_temp,
+            MAX(temp_celsius) as max_temp,
+            AVG(temp_celsius) as avg_temp,
+            SUM(COALESCE(precip_mm, 0)) as total_precip,
+            AVG(wind_speed_kmh) as avg_wind_speed,
+            AVG(humidity_percent) as avg_humidity,
             COUNT(*) as record_count
         FROM hourly_weather 
         WHERE location_id = %s AND location_name = %s
@@ -264,17 +269,20 @@ def save_districts_hourly_to_mysql(hourly_data, location_id, location_name):
         # 准备插入语句
         insert_sql = """
         INSERT INTO hourly_weather 
-        (location_id, location_name, datetime, temp, humidity, precip, pressure, 
-         wind_speed, wind_dir)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (location_id, location_name, province, city, datetime, temp_celsius, humidity_percent, precip_mm, pressure_hpa, 
+         wind_scale, wind_dir, text)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
         location_name = VALUES(location_name),
-        temp = VALUES(temp),
-        humidity = VALUES(humidity),
-        precip = VALUES(precip),
-        pressure = VALUES(pressure),
-        wind_speed = VALUES(wind_speed),
-        wind_dir = VALUES(wind_dir)
+        province = VALUES(province),
+        city = VALUES(city),
+        temp_celsius = VALUES(temp_celsius),
+        humidity_percent = VALUES(humidity_percent),
+        precip_mm = VALUES(precip_mm),
+        pressure_hpa = VALUES(pressure_hpa),
+        wind_scale = VALUES(wind_scale),
+        wind_dir = VALUES(wind_dir),
+        text = VALUES(text)
         """
         
         new_count = 0
@@ -291,16 +299,24 @@ def save_districts_hourly_to_mysql(hourly_data, location_id, location_name):
                 else:
                     datetime_str = time_str
                 
+                # 获取省市信息
+                location_info = get_location_province_city(location_id)
+                province = location_info['province']
+                city = location_info['city']
+                
                 data = (
                     location_id,
                     location_name,
+                    province,  # 使用动态省市信息
+                    city,      # 使用动态省市信息
                     datetime_str,  # 转换后的时间格式
                     hour_data.get('temp'),
                     hour_data.get('humidity'),
                     hour_data.get('precip', 0.0),  # 处理None值
                     hour_data.get('pressure'),
-                    hour_data.get('windSpeed'),
-                    hour_data.get('windDir')
+                    hour_data.get('windScale'),  # 使用windScale而不是windSpeed
+                    hour_data.get('windDir'),
+                    hour_data.get('text')   # 天气现象描述
                 )
                 
                 cursor.execute(insert_sql, data)
@@ -339,12 +355,12 @@ def calculate_districts_daily_summaries_mysql():
             location_id,
             location_name,
             DATE(datetime) as date,
-            MIN(temp) as min_temp,
-            MAX(temp) as max_temp,
-            AVG(temp) as avg_temp,
-            SUM(COALESCE(precip, 0)) as total_precip,
-            AVG(wind_speed) as avg_wind_speed,
-            AVG(humidity) as avg_humidity,
+            MIN(temp_celsius) as min_temp,
+            MAX(temp_celsius) as max_temp,
+            AVG(temp_celsius) as avg_temp,
+            SUM(COALESCE(precip_mm, 0)) as total_precip,
+            AVG(wind_speed_kmh) as avg_wind_speed,
+            AVG(humidity_percent) as avg_humidity,
             COUNT(*) as record_count
         FROM hourly_weather 
         GROUP BY location_id, location_name, DATE(datetime)
@@ -368,6 +384,236 @@ def calculate_districts_daily_summaries_mysql():
     except Exception as e:
         print(f"❌ 计算区县每日汇总失败: {e}")
         raise
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+def get_location_province_city(location_id):
+    """根据location_id获取省市信息"""
+    location_mapping = {
+        '101120101': {'province': '山东省', 'city': '济南市'},
+        '101120102': {'province': '山东省', 'city': '济南市'},
+        '101120103': {'province': '山东省', 'city': '济南市'},
+        '101120104': {'province': '山东省', 'city': '济南市'},
+        '101120105': {'province': '山东省', 'city': '济南市'},
+        '101120106': {'province': '山东省', 'city': '济南市'},
+        '101120107': {'province': '山东省', 'city': '济南市'},
+        '101120108': {'province': '山东省', 'city': '济南市'},
+        '101120109': {'province': '山东省', 'city': '济南市'},
+        '101120110': {'province': '山东省', 'city': '济南市'},
+        '101120111': {'province': '山东省', 'city': '济南市'},
+        '101121601': {'province': '山东省', 'city': '济南市'},
+        '101121603': {'province': '山东省', 'city': '济南市'},
+        '101120201': {'province': '山东省', 'city': '青岛市'},
+        '101120202': {'province': '山东省', 'city': '青岛市'},
+        '101120203': {'province': '山东省', 'city': '青岛市'},
+        '101120204': {'province': '山东省', 'city': '青岛市'},
+        '101120205': {'province': '山东省', 'city': '青岛市'},
+        '101120206': {'province': '山东省', 'city': '青岛市'},
+        '101120207': {'province': '山东省', 'city': '青岛市'},
+        '101120208': {'province': '山东省', 'city': '青岛市'},
+        '101120209': {'province': '山东省', 'city': '青岛市'},
+        '101120210': {'province': '山东省', 'city': '青岛市'},
+        '101120211': {'province': '山东省', 'city': '青岛市'},
+        '101120301': {'province': '山东省', 'city': '淄博市'},
+        '101120302': {'province': '山东省', 'city': '淄博市'},
+        '101120303': {'province': '山东省', 'city': '淄博市'},
+        '101120304': {'province': '山东省', 'city': '淄博市'},
+        '101120305': {'province': '山东省', 'city': '淄博市'},
+        '101120306': {'province': '山东省', 'city': '淄博市'},
+        '101120307': {'province': '山东省', 'city': '淄博市'},
+        '101120308': {'province': '山东省', 'city': '淄博市'},
+        '101120309': {'province': '山东省', 'city': '淄博市'},
+        '101120401': {'province': '山东省', 'city': '德州市'},
+        '101120402': {'province': '山东省', 'city': '德州市'},
+        '101120403': {'province': '山东省', 'city': '德州市'},
+        '101120405': {'province': '山东省', 'city': '德州市'},
+        '101120406': {'province': '山东省', 'city': '德州市'},
+        '101120407': {'province': '山东省', 'city': '德州市'},
+        '101120408': {'province': '山东省', 'city': '德州市'},
+        '101120409': {'province': '山东省', 'city': '德州市'},
+        '101120410': {'province': '山东省', 'city': '德州市'},
+        '101120411': {'province': '山东省', 'city': '德州市'},
+        '101120412': {'province': '山东省', 'city': '德州市'},
+        '101120413': {'province': '山东省', 'city': '德州市'},
+        '101120501': {'province': '山东省', 'city': '烟台市'},
+        '101120502': {'province': '山东省', 'city': '烟台市'},
+        '101120504': {'province': '山东省', 'city': '烟台市'},
+        '101120505': {'province': '山东省', 'city': '烟台市'},
+        '101120506': {'province': '山东省', 'city': '烟台市'},
+        '101120507': {'province': '山东省', 'city': '烟台市'},
+        '101120508': {'province': '山东省', 'city': '烟台市'},
+        '101120509': {'province': '山东省', 'city': '烟台市'},
+        '101120510': {'province': '山东省', 'city': '烟台市'},
+        '101120511': {'province': '山东省', 'city': '烟台市'},
+        '101120512': {'province': '山东省', 'city': '烟台市'},
+        '101120513': {'province': '山东省', 'city': '烟台市'},
+        '101120601': {'province': '山东省', 'city': '潍坊市'},
+        '101120602': {'province': '山东省', 'city': '潍坊市'},
+        '101120603': {'province': '山东省', 'city': '潍坊市'},
+        '101120604': {'province': '山东省', 'city': '潍坊市'},
+        '101120605': {'province': '山东省', 'city': '潍坊市'},
+        '101120606': {'province': '山东省', 'city': '潍坊市'},
+        '101120607': {'province': '山东省', 'city': '潍坊市'},
+        '101120608': {'province': '山东省', 'city': '潍坊市'},
+        '101120609': {'province': '山东省', 'city': '潍坊市'},
+        '101120610': {'province': '山东省', 'city': '潍坊市'},
+        '101120611': {'province': '山东省', 'city': '潍坊市'},
+        '101120612': {'province': '山东省', 'city': '潍坊市'},
+        '101120613': {'province': '山东省', 'city': '潍坊市'},
+        '101120701': {'province': '山东省', 'city': '济宁市'},
+        '101120702': {'province': '山东省', 'city': '济宁市'},
+        '101120703': {'province': '山东省', 'city': '济宁市'},
+        '101120704': {'province': '山东省', 'city': '济宁市'},
+        '101120705': {'province': '山东省', 'city': '济宁市'},
+        '101120706': {'province': '山东省', 'city': '济宁市'},
+        '101120707': {'province': '山东省', 'city': '济宁市'},
+        '101120708': {'province': '山东省', 'city': '济宁市'},
+        '101120709': {'province': '山东省', 'city': '济宁市'},
+        '101120710': {'province': '山东省', 'city': '济宁市'},
+        '101120711': {'province': '山东省', 'city': '济宁市'},
+        '101120712': {'province': '山东省', 'city': '济宁市'},
+        '101120801': {'province': '山东省', 'city': '泰安市'},
+        '101120802': {'province': '山东省', 'city': '泰安市'},
+        '101120803': {'province': '山东省', 'city': '泰安市'},
+        '101120804': {'province': '山东省', 'city': '泰安市'},
+        '101120805': {'province': '山东省', 'city': '泰安市'},
+        '101120806': {'province': '山东省', 'city': '泰安市'},
+        '101120807': {'province': '山东省', 'city': '泰安市'},
+        '101120901': {'province': '山东省', 'city': '临沂市'},
+        '101120902': {'province': '山东省', 'city': '临沂市'},
+        '101120903': {'province': '山东省', 'city': '临沂市'},
+        '101120904': {'province': '山东省', 'city': '临沂市'},
+        '101120905': {'province': '山东省', 'city': '临沂市'},
+        '101120906': {'province': '山东省', 'city': '临沂市'},
+        '101120907': {'province': '山东省', 'city': '临沂市'},
+        '101120908': {'province': '山东省', 'city': '临沂市'},
+        '101120909': {'province': '山东省', 'city': '临沂市'},
+        '101120910': {'province': '山东省', 'city': '临沂市'},
+        '101120911': {'province': '山东省', 'city': '临沂市'},
+        '101120912': {'province': '山东省', 'city': '临沂市'},
+        '101120913': {'province': '山东省', 'city': '临沂市'},
+        '101121001': {'province': '山东省', 'city': '菏泽市'},
+        '101121002': {'province': '山东省', 'city': '菏泽市'},
+        '101121003': {'province': '山东省', 'city': '菏泽市'},
+        '101121004': {'province': '山东省', 'city': '菏泽市'},
+        '101121005': {'province': '山东省', 'city': '菏泽市'},
+        '101121006': {'province': '山东省', 'city': '菏泽市'},
+        '101121007': {'province': '山东省', 'city': '菏泽市'},
+        '101121008': {'province': '山东省', 'city': '菏泽市'},
+        '101121009': {'province': '山东省', 'city': '菏泽市'},
+        '101121010': {'province': '山东省', 'city': '菏泽市'},
+        '101121101': {'province': '山东省', 'city': '滨州市'},
+        '101121102': {'province': '山东省', 'city': '滨州市'},
+        '101121103': {'province': '山东省', 'city': '滨州市'},
+        '101121104': {'province': '山东省', 'city': '滨州市'},
+        '101121105': {'province': '山东省', 'city': '滨州市'},
+        '101121106': {'province': '山东省', 'city': '滨州市'},
+        '101121107': {'province': '山东省', 'city': '滨州市'},
+        '101121108': {'province': '山东省', 'city': '滨州市'},
+        '101121201': {'province': '山东省', 'city': '东营市'},
+        '101121202': {'province': '山东省', 'city': '东营市'},
+        '101121203': {'province': '山东省', 'city': '东营市'},
+        '101121204': {'province': '山东省', 'city': '东营市'},
+        '101121205': {'province': '山东省', 'city': '东营市'},
+        '101121206': {'province': '山东省', 'city': '东营市'},
+        '101121301': {'province': '山东省', 'city': '威海市'},
+        '101121302': {'province': '山东省', 'city': '威海市'},
+        '101121303': {'province': '山东省', 'city': '威海市'},
+        '101121304': {'province': '山东省', 'city': '威海市'},
+        '101121307': {'province': '山东省', 'city': '威海市'},
+        '101121401': {'province': '山东省', 'city': '枣庄市'},
+        '101121402': {'province': '山东省', 'city': '枣庄市'},
+        '101121403': {'province': '山东省', 'city': '枣庄市'},
+        '101121404': {'province': '山东省', 'city': '枣庄市'},
+        '101121405': {'province': '山东省', 'city': '枣庄市'},
+        '101121406': {'province': '山东省', 'city': '枣庄市'},
+        '101121407': {'province': '山东省', 'city': '枣庄市'},
+        '101121501': {'province': '山东省', 'city': '日照市'},
+        '101121502': {'province': '山东省', 'city': '日照市'},
+        '101121503': {'province': '山东省', 'city': '日照市'},
+        '101121504': {'province': '山东省', 'city': '日照市'},
+        '101121505': {'province': '山东省', 'city': '日照市'},
+        '101121701': {'province': '山东省', 'city': '聊城市'},
+        '101121702': {'province': '山东省', 'city': '聊城市'},
+        '101121703': {'province': '山东省', 'city': '聊城市'},
+        '101121704': {'province': '山东省', 'city': '聊城市'},
+        '101121705': {'province': '山东省', 'city': '聊城市'},
+        '101121706': {'province': '山东省', 'city': '聊城市'},
+        '101121707': {'province': '山东省', 'city': '聊城市'},
+        '101121708': {'province': '山东省', 'city': '聊城市'},
+        '101121709': {'province': '山东省', 'city': '聊城市'},
+    }
+    
+    return location_mapping.get(location_id, {'province': '山东省', 'city': '未知市'})
+
+def save_daily_weather_mysql(weather_daily_data, location_id, location_name):
+    """直接保存API返回的weatherDaily数据到MySQL"""
+    if not weather_daily_data:
+        print("⚠️  没有每日天气数据需要保存")
+        return (0, 0)
+    
+    try:
+        conn = get_mysql_connection()
+        cursor = conn.cursor()
+        
+        # 获取省市信息
+        location_info = get_location_province_city(location_id)
+        province = location_info['province']
+        city = location_info['city']
+        
+        # 准备插入语句（使用新的字段名）
+        insert_sql = """
+        INSERT INTO daily_weather 
+        (location_id, location_name, province, city, date, temp_min_celsius, 
+         temp_max_celsius, humidity_percent, precip_mm, pressure_hpa)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+        location_name = VALUES(location_name),
+        province = VALUES(province),
+        city = VALUES(city),
+        temp_min_celsius = VALUES(temp_min_celsius),
+        temp_max_celsius = VALUES(temp_max_celsius),
+        humidity_percent = VALUES(humidity_percent),
+        precip_mm = VALUES(precip_mm),
+        pressure_hpa = VALUES(pressure_hpa)
+        """
+        
+        try:
+            # 准备数据 - 直接使用API返回的weatherDaily字段
+            data = (
+                location_id,
+                location_name,
+                province,
+                city,
+                weather_daily_data.get('date'),  # 日期
+                weather_daily_data.get('tempMin'),  # 最低温度
+                weather_daily_data.get('tempMax'),  # 最高温度
+                weather_daily_data.get('humidity'),  # 湿度
+                weather_daily_data.get('precip', '0.0'),  # 降水量
+                weather_daily_data.get('pressure')  # 气压
+            )
+            
+            cursor.execute(insert_sql, data)
+            
+            if cursor.rowcount == 1:
+                new_count = 1
+                updated_count = 0
+            else:
+                new_count = 0
+                updated_count = 1
+                
+            conn.commit()
+            print(f"✅ {location_name} 每日数据保存完成: 新增{new_count}条，更新{updated_count}条")
+            return (new_count, updated_count)
+                
+        except Exception as e:
+            print(f"⚠️  保存每日数据失败: {e}")
+            return (0, 0)
+        
+    except Exception as e:
+        print(f"❌ 保存每日数据失败: {e}")
+        return (0, 0)
     finally:
         if 'conn' in locals():
             conn.close()
