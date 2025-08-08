@@ -9,12 +9,17 @@ import pandas as pd
 from datetime import datetime
 import logging
 
-# 数据库配置
+# 全局缓存变量
+_location_cache = {}
+
+import os
+
+# 从环境变量获取数据库配置
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '200126kobe',  # MySQL密码
-    'database': 'weather_db',
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', ''),  # 强烈建议使用环境变量
+    'database': os.getenv('DB_NAME', 'weather_db'),
     'charset': 'utf8mb4',
     'autocommit': True
 }
@@ -106,7 +111,7 @@ def init_mysql_database():
         if 'conn' in locals():
             conn.close()
 
-def save_hourly_to_mysql(hourly_data, location_id="101120101", location_name="济南"):
+def save_hourly_to_mysql(hourly_data, location_id, location_name, csv_path=None):
     """保存小时天气数据到MySQL（统一使用hourly_weather表）"""
     if not hourly_data:
         print("⚠️  没有小时数据需要保存")
@@ -150,7 +155,7 @@ def save_hourly_to_mysql(hourly_data, location_id="101120101", location_name="�
                     datetime_str = time_str
                 
                 # 获取省市信息
-                location_info = get_location_province_city(location_id)
+                location_info = get_location_province_city(location_id, csv_path)
                 province = location_info['province']
                 city = location_info['city']
                 
@@ -190,7 +195,7 @@ def save_hourly_to_mysql(hourly_data, location_id="101120101", location_name="�
         if 'conn' in locals():
             conn.close()
 
-def calculate_daily_summaries_mysql(location_id="101120101", location_name="济南"):
+def calculate_daily_summaries_mysql(location_id, location_name, csv_path=None):
     """计算并保存每日天气汇总到MySQL（统一使用daily_weather表）"""
     try:
         conn = get_mysql_connection()
@@ -238,25 +243,9 @@ def calculate_daily_summaries_mysql(location_id="101120101", location_name="济�
         if 'conn' in locals():
             conn.close()
 
-def get_districts_info():
-    """获取区县信息，返回location_id到中文名称的映射"""
-    districts_map = {
-        "101120102": "长清",
-        "101120103": "商河", 
-        "101120104": "章丘",
-        "101120105": "平阴",
-        "101120106": "济阳",
-        "101120107": "历下",
-        "101120108": "市中",
-        "101120109": "槐荫",
-        "101120110": "天桥",
-        "101120111": "历城",
-        "101121601": "莱芜",
-        "101121603": "钢城"
-    }
-    return districts_map
 
-def save_districts_hourly_to_mysql(hourly_data, location_id, location_name):
+
+def save_districts_hourly_to_mysql(hourly_data, location_id, location_name, csv_path=None):
     """保存区县小时天气数据到MySQL"""
     if not hourly_data:
         print("⚠️  没有区县小时数据需要保存")
@@ -300,7 +289,7 @@ def save_districts_hourly_to_mysql(hourly_data, location_id, location_name):
                     datetime_str = time_str
                 
                 # 获取省市信息
-                location_info = get_location_province_city(location_id)
+                location_info = get_location_province_city(location_id, csv_path)
                 province = location_info['province']
                 city = location_info['city']
                 
@@ -388,166 +377,64 @@ def calculate_districts_daily_summaries_mysql():
         if 'conn' in locals():
             conn.close()
 
-def get_location_province_city(location_id):
-    """根据location_id获取省市信息"""
-    location_mapping = {
-        '101120101': {'province': '山东省', 'city': '济南市'},
-        '101120102': {'province': '山东省', 'city': '济南市'},
-        '101120103': {'province': '山东省', 'city': '济南市'},
-        '101120104': {'province': '山东省', 'city': '济南市'},
-        '101120105': {'province': '山东省', 'city': '济南市'},
-        '101120106': {'province': '山东省', 'city': '济南市'},
-        '101120107': {'province': '山东省', 'city': '济南市'},
-        '101120108': {'province': '山东省', 'city': '济南市'},
-        '101120109': {'province': '山东省', 'city': '济南市'},
-        '101120110': {'province': '山东省', 'city': '济南市'},
-        '101120111': {'province': '山东省', 'city': '济南市'},
-        '101121601': {'province': '山东省', 'city': '济南市'},
-        '101121603': {'province': '山东省', 'city': '济南市'},
-        '101120201': {'province': '山东省', 'city': '青岛市'},
-        '101120202': {'province': '山东省', 'city': '青岛市'},
-        '101120203': {'province': '山东省', 'city': '青岛市'},
-        '101120204': {'province': '山东省', 'city': '青岛市'},
-        '101120205': {'province': '山东省', 'city': '青岛市'},
-        '101120206': {'province': '山东省', 'city': '青岛市'},
-        '101120207': {'province': '山东省', 'city': '青岛市'},
-        '101120208': {'province': '山东省', 'city': '青岛市'},
-        '101120209': {'province': '山东省', 'city': '青岛市'},
-        '101120210': {'province': '山东省', 'city': '青岛市'},
-        '101120211': {'province': '山东省', 'city': '青岛市'},
-        '101120301': {'province': '山东省', 'city': '淄博市'},
-        '101120302': {'province': '山东省', 'city': '淄博市'},
-        '101120303': {'province': '山东省', 'city': '淄博市'},
-        '101120304': {'province': '山东省', 'city': '淄博市'},
-        '101120305': {'province': '山东省', 'city': '淄博市'},
-        '101120306': {'province': '山东省', 'city': '淄博市'},
-        '101120307': {'province': '山东省', 'city': '淄博市'},
-        '101120308': {'province': '山东省', 'city': '淄博市'},
-        '101120309': {'province': '山东省', 'city': '淄博市'},
-        '101120401': {'province': '山东省', 'city': '德州市'},
-        '101120402': {'province': '山东省', 'city': '德州市'},
-        '101120403': {'province': '山东省', 'city': '德州市'},
-        '101120405': {'province': '山东省', 'city': '德州市'},
-        '101120406': {'province': '山东省', 'city': '德州市'},
-        '101120407': {'province': '山东省', 'city': '德州市'},
-        '101120408': {'province': '山东省', 'city': '德州市'},
-        '101120409': {'province': '山东省', 'city': '德州市'},
-        '101120410': {'province': '山东省', 'city': '德州市'},
-        '101120411': {'province': '山东省', 'city': '德州市'},
-        '101120412': {'province': '山东省', 'city': '德州市'},
-        '101120413': {'province': '山东省', 'city': '德州市'},
-        '101120501': {'province': '山东省', 'city': '烟台市'},
-        '101120502': {'province': '山东省', 'city': '烟台市'},
-        '101120504': {'province': '山东省', 'city': '烟台市'},
-        '101120505': {'province': '山东省', 'city': '烟台市'},
-        '101120506': {'province': '山东省', 'city': '烟台市'},
-        '101120507': {'province': '山东省', 'city': '烟台市'},
-        '101120508': {'province': '山东省', 'city': '烟台市'},
-        '101120509': {'province': '山东省', 'city': '烟台市'},
-        '101120510': {'province': '山东省', 'city': '烟台市'},
-        '101120511': {'province': '山东省', 'city': '烟台市'},
-        '101120512': {'province': '山东省', 'city': '烟台市'},
-        '101120513': {'province': '山东省', 'city': '烟台市'},
-        '101120601': {'province': '山东省', 'city': '潍坊市'},
-        '101120602': {'province': '山东省', 'city': '潍坊市'},
-        '101120603': {'province': '山东省', 'city': '潍坊市'},
-        '101120604': {'province': '山东省', 'city': '潍坊市'},
-        '101120605': {'province': '山东省', 'city': '潍坊市'},
-        '101120606': {'province': '山东省', 'city': '潍坊市'},
-        '101120607': {'province': '山东省', 'city': '潍坊市'},
-        '101120608': {'province': '山东省', 'city': '潍坊市'},
-        '101120609': {'province': '山东省', 'city': '潍坊市'},
-        '101120610': {'province': '山东省', 'city': '潍坊市'},
-        '101120611': {'province': '山东省', 'city': '潍坊市'},
-        '101120612': {'province': '山东省', 'city': '潍坊市'},
-        '101120613': {'province': '山东省', 'city': '潍坊市'},
-        '101120701': {'province': '山东省', 'city': '济宁市'},
-        '101120702': {'province': '山东省', 'city': '济宁市'},
-        '101120703': {'province': '山东省', 'city': '济宁市'},
-        '101120704': {'province': '山东省', 'city': '济宁市'},
-        '101120705': {'province': '山东省', 'city': '济宁市'},
-        '101120706': {'province': '山东省', 'city': '济宁市'},
-        '101120707': {'province': '山东省', 'city': '济宁市'},
-        '101120708': {'province': '山东省', 'city': '济宁市'},
-        '101120709': {'province': '山东省', 'city': '济宁市'},
-        '101120710': {'province': '山东省', 'city': '济宁市'},
-        '101120711': {'province': '山东省', 'city': '济宁市'},
-        '101120712': {'province': '山东省', 'city': '济宁市'},
-        '101120801': {'province': '山东省', 'city': '泰安市'},
-        '101120802': {'province': '山东省', 'city': '泰安市'},
-        '101120803': {'province': '山东省', 'city': '泰安市'},
-        '101120804': {'province': '山东省', 'city': '泰安市'},
-        '101120805': {'province': '山东省', 'city': '泰安市'},
-        '101120806': {'province': '山东省', 'city': '泰安市'},
-        '101120807': {'province': '山东省', 'city': '泰安市'},
-        '101120901': {'province': '山东省', 'city': '临沂市'},
-        '101120902': {'province': '山东省', 'city': '临沂市'},
-        '101120903': {'province': '山东省', 'city': '临沂市'},
-        '101120904': {'province': '山东省', 'city': '临沂市'},
-        '101120905': {'province': '山东省', 'city': '临沂市'},
-        '101120906': {'province': '山东省', 'city': '临沂市'},
-        '101120907': {'province': '山东省', 'city': '临沂市'},
-        '101120908': {'province': '山东省', 'city': '临沂市'},
-        '101120909': {'province': '山东省', 'city': '临沂市'},
-        '101120910': {'province': '山东省', 'city': '临沂市'},
-        '101120911': {'province': '山东省', 'city': '临沂市'},
-        '101120912': {'province': '山东省', 'city': '临沂市'},
-        '101120913': {'province': '山东省', 'city': '临沂市'},
-        '101121001': {'province': '山东省', 'city': '菏泽市'},
-        '101121002': {'province': '山东省', 'city': '菏泽市'},
-        '101121003': {'province': '山东省', 'city': '菏泽市'},
-        '101121004': {'province': '山东省', 'city': '菏泽市'},
-        '101121005': {'province': '山东省', 'city': '菏泽市'},
-        '101121006': {'province': '山东省', 'city': '菏泽市'},
-        '101121007': {'province': '山东省', 'city': '菏泽市'},
-        '101121008': {'province': '山东省', 'city': '菏泽市'},
-        '101121009': {'province': '山东省', 'city': '菏泽市'},
-        '101121010': {'province': '山东省', 'city': '菏泽市'},
-        '101121101': {'province': '山东省', 'city': '滨州市'},
-        '101121102': {'province': '山东省', 'city': '滨州市'},
-        '101121103': {'province': '山东省', 'city': '滨州市'},
-        '101121104': {'province': '山东省', 'city': '滨州市'},
-        '101121105': {'province': '山东省', 'city': '滨州市'},
-        '101121106': {'province': '山东省', 'city': '滨州市'},
-        '101121107': {'province': '山东省', 'city': '滨州市'},
-        '101121108': {'province': '山东省', 'city': '滨州市'},
-        '101121201': {'province': '山东省', 'city': '东营市'},
-        '101121202': {'province': '山东省', 'city': '东营市'},
-        '101121203': {'province': '山东省', 'city': '东营市'},
-        '101121204': {'province': '山东省', 'city': '东营市'},
-        '101121205': {'province': '山东省', 'city': '东营市'},
-        '101121206': {'province': '山东省', 'city': '东营市'},
-        '101121301': {'province': '山东省', 'city': '威海市'},
-        '101121302': {'province': '山东省', 'city': '威海市'},
-        '101121303': {'province': '山东省', 'city': '威海市'},
-        '101121304': {'province': '山东省', 'city': '威海市'},
-        '101121307': {'province': '山东省', 'city': '威海市'},
-        '101121401': {'province': '山东省', 'city': '枣庄市'},
-        '101121402': {'province': '山东省', 'city': '枣庄市'},
-        '101121403': {'province': '山东省', 'city': '枣庄市'},
-        '101121404': {'province': '山东省', 'city': '枣庄市'},
-        '101121405': {'province': '山东省', 'city': '枣庄市'},
-        '101121406': {'province': '山东省', 'city': '枣庄市'},
-        '101121407': {'province': '山东省', 'city': '枣庄市'},
-        '101121501': {'province': '山东省', 'city': '日照市'},
-        '101121502': {'province': '山东省', 'city': '日照市'},
-        '101121503': {'province': '山东省', 'city': '日照市'},
-        '101121504': {'province': '山东省', 'city': '日照市'},
-        '101121505': {'province': '山东省', 'city': '日照市'},
-        '101121701': {'province': '山东省', 'city': '聊城市'},
-        '101121702': {'province': '山东省', 'city': '聊城市'},
-        '101121703': {'province': '山东省', 'city': '聊城市'},
-        '101121704': {'province': '山东省', 'city': '聊城市'},
-        '101121705': {'province': '山东省', 'city': '聊城市'},
-        '101121706': {'province': '山东省', 'city': '聊城市'},
-        '101121707': {'province': '山东省', 'city': '聊城市'},
-        '101121708': {'province': '山东省', 'city': '聊城市'},
-        '101121709': {'province': '山东省', 'city': '聊城市'},
-    }
-    
-    return location_mapping.get(location_id, {'province': '山东省', 'city': '未知市'})
 
-def save_daily_weather_mysql(weather_daily_data, location_id, location_name):
+def get_location_province_city(location_id, csv_path=None):
+    """根据location_id获取省市信息 - 支持动态CSV路径
+    
+    Args:
+        location_id: 位置ID
+        csv_path: CSV文件路径，如果为None则使用环境变量或默认映射
+    
+    Returns:
+        dict: 包含province和city信息的字典
+    """
+    if not location_id:
+        raise ValueError("location_id不能为空")
+    
+    # 如果提供了csv_path，优先使用
+    if csv_path and os.path.exists(csv_path):
+        try:
+            import csv
+            with open(csv_path, 'r', encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    loc_id = row.get('location_id', '').strip()
+                    province = row.get('province', '').strip()
+                    city = row.get('city', '').strip()
+                    
+                    if loc_id == location_id and province and city:
+                        return {'province': province, 'city': city}
+        except Exception:
+            # 如果指定路径失败，继续尝试其他方式
+            pass
+    
+    # 使用环境变量指定的CSV路径
+    env_csv_path = os.getenv('CITY_CSV_PATH')
+    if env_csv_path and os.path.exists(env_csv_path):
+        try:
+            import csv
+            with open(env_csv_path, 'r', encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    loc_id = row.get('location_id', '').strip()
+                    province = row.get('province', '').strip()
+                    city = row.get('city', '').strip()
+                    
+                    if loc_id == location_id and province and city:
+                        return {'province': province, 'city': city}
+        except Exception:
+            pass
+    
+        # 未找到省市信息，提供有意义的错误提示
+    raise ValueError(
+        f"未找到location_id '{location_id}' 对应的省市信息。\n"
+        f"请通过以下方式之一提供城市信息：\n"
+        f"1. 设置 csv_path 参数指向包含省市信息的CSV文件\n"
+        f"2. 设置环境变量 CITY_CSV_PATH 指向CSV文件\n"
+        f"3. 确保CSV文件包含 location_id, province, city 列"
+    )
+
+def save_daily_weather_mysql(weather_daily_data, location_id, location_name, csv_path=None):
     """直接保存API返回的weatherDaily数据到MySQL"""
     if not weather_daily_data:
         print("⚠️  没有每日天气数据需要保存")
@@ -557,8 +444,9 @@ def save_daily_weather_mysql(weather_daily_data, location_id, location_name):
         conn = get_mysql_connection()
         cursor = conn.cursor()
         
+        
         # 获取省市信息
-        location_info = get_location_province_city(location_id)
+        location_info = get_location_province_city(location_id, csv_path)
         province = location_info['province']
         city = location_info['city']
         
@@ -618,58 +506,55 @@ def save_daily_weather_mysql(weather_daily_data, location_id, location_name):
         if 'conn' in locals():
             conn.close()
 
-def get_mysql_stats():
-    """获取MySQL数据库统计信息"""
+def get_mysql_stats(location_name=None):
+    """获取MySQL数据库统计信息
+    
+    Args:
+        location_name: 指定城市名称，如果为None则返回所有数据
+    """
     try:
         conn = get_mysql_connection()
         
-        # 获取济南市记录数（从hourly_weather表中筛选）
-        city_hourly_count = pd.read_sql_query(
-            "SELECT COUNT(*) as count FROM hourly_weather WHERE location_name = '济南'", conn
-        ).iloc[0]['count']
-        
-        city_daily_count = pd.read_sql_query(
-            "SELECT COUNT(*) as count FROM daily_weather WHERE location_name = '济南'", conn
-        ).iloc[0]['count']
-        
-        # 获取区县记录数（排除济南）
-        districts_hourly_count = pd.read_sql_query(
-            "SELECT COUNT(*) as count FROM hourly_weather WHERE location_name != '济南'", conn
-        ).iloc[0]['count']
-        
-        districts_daily_count = pd.read_sql_query(
-            "SELECT COUNT(*) as count FROM daily_weather WHERE location_name != '济南'", conn
-        ).iloc[0]['count']
-        
-        # 获取最新数据时间
-        city_latest_hourly = pd.read_sql_query(
-            "SELECT MAX(datetime) as latest FROM hourly_weather WHERE location_name = '济南'", conn
-        ).iloc[0]['latest']
-        
-        city_latest_daily = pd.read_sql_query(
-            "SELECT MAX(date) as latest FROM daily_weather WHERE location_name = '济南'", conn
-        ).iloc[0]['latest']
-        
-        districts_latest_hourly = pd.read_sql_query(
-            "SELECT MAX(datetime) as latest FROM hourly_weather WHERE location_name != '济南'", conn
-        ).iloc[0]['latest']
-        
-        districts_latest_daily = pd.read_sql_query(
-            "SELECT MAX(date) as latest FROM daily_weather WHERE location_name != '济南'", conn
-        ).iloc[0]['latest']
+        if location_name:
+            # 获取指定城市的记录数
+            target_hourly = pd.read_sql_query(
+                "SELECT COUNT(*) as count FROM hourly_weather WHERE location_name = %s", 
+                conn, params=[location_name]
+            ).iloc[0]['count']
+            
+            target_daily = pd.read_sql_query(
+                "SELECT COUNT(*) as count FROM daily_weather WHERE location_name = %s", 
+                conn, params=[location_name]
+            ).iloc[0]['count']
+            
+            other_hourly = pd.read_sql_query(
+                "SELECT COUNT(*) as count FROM hourly_weather WHERE location_name != %s", 
+                conn, params=[location_name]
+            ).iloc[0]['count']
+            
+            other_daily = pd.read_sql_query(
+                "SELECT COUNT(*) as count FROM daily_weather WHERE location_name != %s", 
+                conn, params=[location_name]
+            ).iloc[0]['count']
+            
+            result = {
+                'target_hourly': target_hourly,
+                'target_daily': target_daily,
+                'other_hourly': other_hourly,
+                'other_daily': other_daily
+            }
+        else:
+            # 获取所有数据的总统计
+            total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+            total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+            
+            result = {
+                'total_hourly': total_hourly,
+                'total_daily': total_daily
+            }
         
         conn.close()
-        
-        return {
-            'city_hourly_count': city_hourly_count,
-            'city_daily_count': city_daily_count,
-            'districts_hourly_count': districts_hourly_count,
-            'districts_daily_count': districts_daily_count,
-            'city_latest_hourly': city_latest_hourly,
-            'city_latest_daily': city_latest_daily,
-            'districts_latest_hourly': districts_latest_hourly,
-            'districts_latest_daily': districts_latest_daily
-        }
+        return result
         
     except Exception as e:
         print(f"❌ 获取统计信息失败: {e}")
@@ -681,6 +566,9 @@ if __name__ == "__main__":
         init_mysql_database()
         stats = get_mysql_stats()
         if stats:
-            print(f"📊 数据库统计: 小时数据{stats['hourly_count']}条，每日数据{stats['daily_count']}条")
+            if 'total_hourly' in stats:
+                print(f"📊 数据库统计: 总小时数据{stats['total_hourly']}条，总每日数据{stats['total_daily']}条")
+            else:
+                print(f"📊 数据库统计: 目标城市小时数据{stats['target_hourly']}条，每日数据{stats['target_daily']}条")
     except Exception as e:
         print(f"❌ 测试失败: {e}") 

@@ -18,7 +18,14 @@
       "Bash(python3 -c \"\nimport sys\nimport requests\nimport json\nfrom datetime import datetime, timedelta\nsys.path.append(''.'')\nfrom 每日自动执行 import generate_jwt_token, setup_logging\nimport mysql_db_utils\n\nlogger = setup_logging()\nprint(''重新测试区县数据获取...'')\n\n# 生成token\ntoken = generate_jwt_token(logger)\nif not token:\n    print(''❌ Token生成失败'')\n    exit(1)\n\nprint(''✅ Token生成成功'')\n\n# 测试获取一个区县的数据（历下区）\nyesterday = datetime.now() - timedelta(days=1)\ndate_str = yesterday.strftime(''%Y%m%d'')\nlocation_id = ''101120107''\nlocation_name = ''历下''\n\napi_host = ''jd46h2979n.re.qweatherapi.com''\napi_base = f''https://{api_host}/v7/historical/weather''\n\nheaders = {\n    ''Authorization'': f''Bearer {token}'',\n    ''Content-Type'': ''application/json''\n}\n\nparams = {\n    ''location'': location_id,\n    ''date'': date_str\n}\n\ntry:\n    print(f''正在获取{location_name}({location_id}) {date_str}的天气数据...'')\n    response = requests.get(api_base, headers=headers, params=params, timeout=30)\n    response.raise_for_status()\n    \n    data = response.json()\n    \n    if data.get(''code'') == ''200'':\n        hourly_data = data.get(''weatherHourly'', [])\n        print(f''✅ 成功获取{location_name}天气数据，共{len(hourly_data)}条记录'')\n        \n        # 显示前两条数据样例\n        if len(hourly_data) >= 2:\n            print(''数据样例:'')\n            for i, item in enumerate(hourly_data[:2]):\n                print(f''  第{i+1}条: {item}'')\n        \n        # 测试保存数据\n        result = mysql_db_utils.save_districts_hourly_to_mysql(hourly_data, location_id, location_name)\n        if result:\n            new_count, updated_count = result\n            print(f''✅ 数据保存成功: 新增{new_count}条，更新{updated_count}条'')\n        \n        # 测试每日汇总\n        mysql_db_utils.calculate_districts_daily_summaries_mysql()\n        print(''✅ 每日汇总计算完成'')\n        \n        # 查看统计信息\n        stats = mysql_db_utils.get_mysql_stats()\n        if stats:\n            print(f''✅ 当前区县小时数据: {stats[\"\"districts_hourly_count\"\"]}条'')\n            print(f''✅ 当前区县每日数据: {stats[\"\"districts_daily_count\"\"]}条'')\n        \n    else:\n        print(f''❌ API返回错误: {data.get(\"\"code\"\")} - {data.get(\"\"msg\"\", \"\"Unknown error\"\")}'')\n        \nexcept Exception as e:\n    print(f''❌ 测试失败: {e}'')\n\")",
       "Bash(/opt/miniconda3/envs/weather_forcast/bin/python 收集历史气象数据.py)",
       "Bash(python3 -c \"import pandas as pd; df = pd.read_excel(''/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/山东济南气象数据/区.xlsx''); print(df.to_string())\")",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(python -c \"\nimport mysql_db_utils\nconn = mysql_db_utils.get_mysql_connection()\ncursor = conn.cursor()\ncursor.execute(''SELECT location_name, date FROM daily_weather WHERE date >= \"\"2025-07-30\"\" ORDER BY date DESC LIMIT 10'')\nresults = cursor.fetchall()\nfor row in results:\n    print(f''{row[0]}: {row[1]}'')\nconn.close()\n\")",
+      "Bash(plutil:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(crontab:*)",
+      "Bash(curl:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

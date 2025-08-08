@@ -1,96 +1,218 @@
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:232: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:236: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:241: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:245: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:423: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:628: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:427: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:632: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:432: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:637: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:436: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:641: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:441: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:646: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:445: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:650: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:449: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:654: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:453: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:658: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:411: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:628: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:415: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:632: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:420: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:637: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:424: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:641: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:429: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:646: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:433: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:650: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   city_latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:437: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:654: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:441: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:658: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   districts_latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:450: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  city_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:454: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  city_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:459: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  districts_hourly_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:463: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  districts_daily_count = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:468: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  city_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:472: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  city_latest_daily = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:476: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  districts_latest_hourly = pd.read_sql_query(
-/Users/incarnation/Desktop/准动（银豹）/气象预测货物销售状况/mysql_db_utils.py:480: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  districts_latest_daily = pd.read_sql_query(
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+Traceback (most recent call last):
+  File "/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/每日自动执行.py", line 447, in <module>
+    exit_code = main()
+  File "/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/每日自动执行.py", line 427, in main
+    logger.info(f"   📊 小时数据: {len(all_hourly_data)}条 (期望: {小时数据期望}条)")
+                                       ^^^^^^^^^^^^^^^
+NameError: name 'all_hourly_data' is not defined. Did you mean: 'hourly_data'?
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+Traceback (most recent call last):
+  File "/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/每日自动执行.py", line 449, in <module>
+    exit_code = main()
+  File "/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/每日自动执行.py", line 429, in main
+    logger.info(f"   📊 小时数据: {len(all_hourly_data)}条 (期望: {小时数据期望}条)")
+                                       ^^^^^^^^^^^^^^^
+NameError: name 'all_hourly_data' is not defined. Did you mean: 'hourly_data'?
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集（山东）/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+chdir: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集/mysql_db_utils.py:548: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_hourly = pd.read_sql_query("SELECT COUNT(*) as count FROM hourly_weather", conn).iloc[0]['count']
+/Users/incarnation/Desktop/准动（银豹）/气象数据收集/mysql_db_utils.py:549: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  total_daily = pd.read_sql_query("SELECT COUNT(*) as count FROM daily_weather", conn).iloc[0]['count']
